@@ -18,7 +18,8 @@ package simplephonebook;
 import java.util.*;
 import java.io.*;
 
-public class Keyboard {
+public class
+Keyboard {
 
     private static Scanner in = new Scanner(System.in);
     private static boolean redirected = false;

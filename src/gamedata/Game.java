@@ -49,7 +49,7 @@ public class Game {
 		return genre.toString();
 	}
 
-	public String getPublisher() {
+	public Double getPublisher() {
 		return publisher;
 	}
 

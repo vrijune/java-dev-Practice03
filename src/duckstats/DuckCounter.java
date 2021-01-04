@@ -17,7 +17,7 @@ public class DuckCounter {
 	private int ducks;
 	private int ducklings;
 
-	public DuckCounter(String date, int ducks, int ducklings) throws DuckCounterException {
+	public DuckCounter(int ducks) throws DuckCounterException {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
 			this.date = LocalDate.parse(date, formatter);
