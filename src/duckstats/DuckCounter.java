@@ -12,19 +12,19 @@ import java.time.format.DateTimeParseException;
  * @author Yu-Cheng Tu
  *
  */
-public class DuckCounter {
+public class DuckCounter implements Comparable<DuckCounter> {
 	private LocalDate date;
 	private int ducks;
 	private int ducklings;
 
-	public DuckCounter(int ducks) throws DuckCounterException {
+	public DuckCounter(String date, int ducks, int ducklings) throws DuckCountException {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
 			this.date = LocalDate.parse(date, formatter);
 			this.ducks = ducks;
-			this.ducklings = ducklings;
+			this.ducklings = this.ducklings;
 		} catch (DateTimeParseException e) {
-			throw new DuckCounterException("Error in duck data!");
+			throw new DuckCountException("Error in duck data!");
 		}
 	}
 
@@ -38,5 +38,16 @@ public class DuckCounter {
 
 	public int getDucklingCount() {
 		return ducklings;
+	}
+
+
+	@Override
+	public int compareTo(DuckCounter other) {
+		if (this.ducks > other.getDuckCount()) {
+			return -1;
+		} else if (this.ducks < other.getDuckCount()) {
+			return 1;
+		}
+		return 0;
 	}
 }

@@ -55,46 +55,37 @@ public class GameCollector {
 
     // step c i.
     private int checkYear(String yearStr) throws InvalidYearException, GameInFutureException {
-        int yearInt = Integer.parseInt(yearStr);
-        if (yearStr == null) {
-            yearInt = 2016;
-        } else if (yearInt < 1950) {
+        if (yearStr.isEmpty()) {
+            return 2016;
+        }
+        int year = Integer.parseInt(yearStr);
+        if (year < 1950) {
             throw new InvalidYearException("The game is too old!");
-        } else if (yearInt > 2016) {
+        } else if (year > 2016) {
             throw new GameInFutureException("The game is too new!");
         }
 
-        return yearInt;
+        return year;
     }
 
 
     // step c ii.
     private Genre getGenre(String genre) {
-//        switch (genre.toLowerCase())
-//        case "action"
-//        return Genre.ACTION;
-//
-//
-//        default:
-//        return Genre.OTHER;
-
-        if (genre.toLowerCase() == "action") {
-            genre = "ACTION";
-        } else if (genre.toLowerCase() == "mise ") {
-            genre = "MISC";
-        } else if (genre.toLowerCase() == "role-playing") {
-            genre = "RPG";
-        } else if (genre.toLowerCase() == "puzzle") {
-            genre = "PUZZLE";
-        } else if (genre.toLowerCase() == "sports") {
-            genre = "SPORTS";
-        } else {
-            genre = "OTHER";
+        switch (genre.toLowerCase()) {
+            case "action":
+                return Genre.ACTION;
+            case "misc":
+                return Genre.MISC;
+            case "role-playing":
+                return Genre.RPG;
+            case "puzzle":
+                return Genre.PUZZLE;
+            case "sports":
+                return Genre.SPORTS;
+            default:
+                return Genre.OTHER;
         }
-
-        return Genre.genre;
     }
-
 
     // step c iii.
     private Game processGameDetails(String[] gameDetails) throws InvalidYearException, GameInFutureException {
@@ -109,12 +100,14 @@ public class GameCollector {
 
     // step c iv.
     private void processFile(String filePath) {
-        List<String> games = new ArrayList<String>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File("/games.csv")))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-                games.add(line);
+        games = new ArrayList<Game>();
+        try (BufferedReader bR = new BufferedReader(new FileReader(new File(filePath)))) {
+            String gameData;
+
+            while ((gameData = bR.readLine()) != null) {
+                String[] gameDetails = gameData.split(",");
+                Game game = processGameDetails(gameDetails);
+                games.add(game);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -122,19 +115,17 @@ public class GameCollector {
             e.printStackTrace();
         } catch (InvalidYearException e) {
             System.out.println(e.getMessage());
-        }catch ()
-        ;
+        } catch (GameInFutureException e) {
+            System.out.println(e.getMessage());
+        }
 
     }
 
     // step c v.
-    private void printFirstFiveGames() throws InvalidYearException, GameInFutureException {
-        List<Game> firstFiveGames = new ArrayList<>();
+    private void printFirstFiveGames() {
         for (int i = 0; i < 5; i++) {
-            firstFiveGames.add(games.get(i));
-
+            System.out.println(games.get(i));
         }
-        System.out.println(firstFiveGames);
 
 
     }
@@ -143,61 +134,53 @@ public class GameCollector {
 
     private int getNumberOfGamesByGenre(Genre genre) {
         int count = 0;
-        for {
-            Game game :games){
-                if (game.getGenre().equals(genre.toString()))
-                    count++;
-
+        for (Game game : games) {
+            if (game.getGenre().equals(genre.toString())) {
+                count++;
             }
 
-
-//        int actionNumbers = Collections.frequency(Collections.singleton(genre), "action");
-//        int puzzleNumbers = Collections.frequency(Collections.singleton(genre), "puzzle");
-//        int RolePlayNumbers = Collections.frequency(Collections.singleton(genre), "Role-Playing");
-//        int sportNumbers = Collections.frequency(Collections.singleton(genre), "sports");
-
-            return getNumberOfGamesByGenre(genre);
         }
 
-        // step c vii.
-        private void printTopTenSortedGames () {
-            Comparator<Game> gameComperator = new Comparator<Game>() {
-                @Override
-                public int compare(Game o1, Game o2) {
-                    double diff = o1.getYear() - o2.getYear();
-                    if (diff != 0) {
-                        return Double.valueOf(o2.getYear()).compareTo((double) o1.getYear());
-                    }
-                    return Double.valueOf(o2.getPublisher()).compareTo(o1.getPublisher());
+        return count;
+    }
+
+    // step c vii.
+    private void printTopTenSortedGames() {
+        Comparator<Game> gameComperator = new Comparator<Game>() {
+            @Override
+            public int compare(Game o1, Game o2) {
+                double diff = o1.getYear() - o2.getYear();
+                if (diff != 0) {
+                    return Double.valueOf(o2.getYear()).compareTo((double) o1.getYear());
                 }
-            };
-        }
-
-
-        // step c viii.
-        private void exportSortedGames (String filePath){
-
-            try {
-
-                BufferedReader bW = new BufferedReader()
+                return Double.valueOf(o2.getPublisher()).compareTo(Double.valueOf(o1.getPublisher()));
             }
+        };
+    }
 
-            FileWriter myWriter = new FileWriter("filePath");
-            myWriter.write(String.format(name, publisher, year));
-            myWriter.close();
-        } catch(IOException e){
-            e.printStackTrace();
+
+    // step c viii.
+    private void exportSortedGames(String filePath) {
+
+        try (BufferedWriter bW = new BufferedWriter(new FileWriter(filePath))) {
+            String gameContent = "";
+            for (Game game : games) {
+                gameContent += String.format("%s,%4d,%s%n", game.getName(), game.getYear(), game.getPublisher());
+            }
+            bW.write(gameContent);
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
 
     }
 
-    // step c ix.
-    private Map<Integer, Integer> getCountOfGamesPerYear() {
-        Map<Integer, Integer> numOfGamesPerYear = new TreeMap<>();
-//        Integer value = null;
-        for (Game game : games) {
-            Integer value = numOfGamesPerYear.get(game.getYear());
-            int freq = value == null ? 1 : value + 1;
+        // step c ix.
+            private Map<Integer, Integer> getCountOfGamesPerYear () {
+                Map<Integer, Integer> numOfGamesPerYear = new TreeMap<>();
+                for (Game game : games) {
+                    Integer value = numOfGamesPerYear.get(game.getYear());
+                    int freq = value == null ? 1 : value + 1;
 
 //            int freq;
 //            if (value == null){
@@ -207,12 +190,11 @@ public class GameCollector {
 //            }
 
 
-            numOfGamesPerYear.put(game.getYear(),freq);
+                    numOfGamesPerYear.put(game.getYear(), freq);
 
 
-        }
+                }
 
 
-        return numOfGamesPerYear;
-    }
-}
+                return numOfGamesPerYear;
+            } }

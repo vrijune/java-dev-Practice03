@@ -36,66 +36,48 @@ public class DuckCounterProcessor {
         System.out.println("=================");
 
         // step c.
+        Collections.sort(duckData);
+        dp.printFirstTenDuckCounts(duckData);
+        System.out.println("=================");
 
-        List<DuckCounter> firstTenDuckOrdering = new ArrayList<DuckCounter>();
-        Number maxNum = Collections.max(duckData, new Comparator<DuckCounter>() {
-                    @Override
-                    public int compare(DuckCounter o1, DuckCounter o2) {
-
-                        return Double.valueOf(o1.getDuckCount()).compareTo((double) o2.getDuckCount());
-
-                        Collections.sort(DuckCounter,maxNum );
-                        dp.printFirstTenDuckCounts(duckData);
-                        System.out.println("=================");
-                    }
+    }
 
 
-
-                    // step b ii.
-                    private void printFirstTenDuckCounts(List<DuckCounter> duckData) {
-
-                        List<DuckCounter> FirstTenData = new ArrayList<>();
-
-                        try {
-                            for (int i = 0; i < 10; i++) {
-                                FirstTenData.add(duckData.get(i));
-                                Object date = duckData.getDate().toString();
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
+            // step b ii.
+            private void printFirstTenDuckCounts(List<DuckCounter> duckData) {
+                for (int i = 0; i < 10; i++) {
+                    DuckCounter ducksPerCount = duckData.get(i);
+                    System.out.printf("Date: %s, ducks: %d, ducklings: %d%n", ducksPerCount.getDate().toString(),
+                            ducksPerCount.getDuckCount(), ducksPerCount.getDucklingCount());
+                }
+            }
 
 
             // step b i.
             private List<DuckCounter> processFile(String filePath) {
 
-
-                    List<DuckCounter> DuckCounter = new ArrayList<>();
-
-                    try (BufferedReader reader = new BufferedReader(new FileReader(new File("/ducks.csv")))) {
-
-                        String oneRecord = null;
-                        String[] strArray = oneRecord.split(",");
-
-                        for (int i = 0; i < DuckCounter.size(); i++) {
-
-                            DuckCounter.add(new DuckCounter(String.getDate.toString(strArray[0]), Integer.parseInt(strArray[1]), Integer.parseInt(strArray[2])))
-                        }
-
-
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-
+                ArrayList<DuckCounter> duckData = new ArrayList<DuckCounter>();
+                try (BufferedReader bR = new BufferedReader(new FileReader(new File(filePath)))) {
+                    String data = "";
+                    while ((data = bR.readLine()) != null) {
+                        String[] ducksPerPond = data.split(",");
+                        String date = ducksPerPond[0];
+                        int ducks = Integer.parseInt(ducksPerPond[1]);
+                        int ducklings = Integer.parseInt(ducksPerPond[2]);
+                        duckData.add(new DuckCounter(date, ducks, ducklings));
 
                     }
-
-
-                    return DuckCounter;
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (DuckCountException e) {
+                    e.printStackTrace();
                 }
-
+                return duckData;
 
             }
+
+
+
+}
