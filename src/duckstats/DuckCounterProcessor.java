@@ -59,7 +59,7 @@ public class DuckCounterProcessor {
                         try {
                             for (int i = 0; i < 10; i++) {
                                 FirstTenData.add(duckData.get(i));
-                                Object date = duckData.getDate.toString();
+                                Object date = duckData.getDate().toString();
                             }
 
                         } catch (Exception e) {
@@ -71,8 +71,6 @@ public class DuckCounterProcessor {
             // step b i.
             private List<DuckCounter> processFile(String filePath) {
 
-
-                private void printWithBufferedReader () {
 
                     List<DuckCounter> DuckCounter = new ArrayList<>();
 

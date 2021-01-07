@@ -11,6 +11,7 @@ public class SimplePhoneBook {
     public SimplePhoneBook() {
         String name;
         Integer age;
+        HashMap<String, Integer> map = new HashMap<>();
 
     }
 
@@ -33,11 +34,11 @@ public class SimplePhoneBook {
     }
 
 
-    // 2b. Adds a single contact to the phone book collection
+     2b. Adds a single contact to the phone book collection
     public void addNewContact(String name, int number) {
         String newName = null;
         Integer newNumber = 0;
-        HashMap<String, Integer> map = new HashMap<>();
+
         map.put(newName, newNumber);
         Set<String> set = map.keySet();
         for (String key : set) {
@@ -47,22 +48,41 @@ public class SimplePhoneBook {
         }
 
 
+        Integer num = phoneBook.get(name);
+        if (num != null){
+            System.out.printf(" Current number for %s is %d.%n", name , number);
+        }
+        phoneBook.put(name, number);
+        System.out.printf("");
+
     }
+
 
     // 2c. Prints the number for a given name
     public void printNumberFor(String name) {
-        Map<String, Integer> map = new HashMap<>();
-        for (String key : map.keySet()) {
-            if (map.containsKey(name)) {
-                Integer value = map.get(key);
-                System.out.println("Current number for" + name + "is" + value);
-            } else {
-                System.out.println("The person" + name + " does not exist in the phone book");
-            }
+//        Map<String, Integer> map = new HashMap<>();
+//        for (String key : map.keySet()) {
+//            if (map.containsKey(name)) {
+//                Integer value = map.get(key);
+//                System.out.println("Current number for" + name + "is" + value);
+//            } else {
+//                System.out.println("The person" + name + " does not exist in the phone book");
+//            }
+//
+//        }
+//
+//    }
 
-        }
+    Integer num = phoneBook.get(name);
+    if
 
-    }
+
+
+
+
+
+
+
 
     // 2d. Prints the total number of entries of the phone book collection
     public void printTotalNumberOfEntries() {
@@ -74,6 +94,9 @@ public class SimplePhoneBook {
         System.out.println("There are" + totalNumber + "entries in the phone book");
         sc.close();
     }
+
+
+
 
 
     // 2e. Prints the name for a given phone number

@@ -70,6 +70,14 @@ public class GameCollector {
 
     // step c ii.
     private Genre getGenre(String genre) {
+//        switch (genre.toLowerCase())
+//        case "action"
+//        return Genre.ACTION;
+//
+//
+//        default:
+//        return Genre.OTHER;
+
         if (genre.toLowerCase() == "action") {
             genre = "ACTION";
         } else if (genre.toLowerCase() == "mise ") {
@@ -84,7 +92,7 @@ public class GameCollector {
             genre = "OTHER";
         }
 
-        return getGenre(genre);
+        return Genre.genre;
     }
 
 
@@ -112,7 +120,10 @@ public class GameCollector {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        } catch (InvalidYearException e) {
+            System.out.println(e.getMessage());
+        }catch ()
+        ;
 
     }
 
@@ -129,38 +140,52 @@ public class GameCollector {
     }
 
     // step c vi.
+
     private int getNumberOfGamesByGenre(Genre genre) {
-        int actionNumbers = Collections.frequency(Collections.singleton(genre), "action");
-        int puzzleNumbers = Collections.frequency(Collections.singleton(genre), "puzzle");
-        int RolePlayNumbers = Collections.frequency(Collections.singleton(genre), "Role-Playing");
-        int sportNumbers = Collections.frequency(Collections.singleton(genre), "sports");
+        int count = 0;
+        for {
+            Game game :games){
+                if (game.getGenre().equals(genre.toString()))
+                    count++;
 
-        return getNumberOfGamesByGenre(genre);
-    }
-
-    // step c vii.
-    private void printTopTenSortedGames() {
-        Comparator<Game> gameComperator = new Comparator<Game>() {
-            @Override
-            public int compare(Game o1, Game o2) {
-                double diff = o1.getYear() - o2.getYear();
-                if (diff != 0) {
-                    return Double.valueOf(o2.getYear()).compareTo((double) o1.getYear());
-                }
-                return Double.valueOf(o2.getPublisher()).compareTo(o1.getPublisher());
             }
-        };
-    }
 
-    // step c viii.
-    private void exportSortedGames(String filePath) {
 
-        try {
+//        int actionNumbers = Collections.frequency(Collections.singleton(genre), "action");
+//        int puzzleNumbers = Collections.frequency(Collections.singleton(genre), "puzzle");
+//        int RolePlayNumbers = Collections.frequency(Collections.singleton(genre), "Role-Playing");
+//        int sportNumbers = Collections.frequency(Collections.singleton(genre), "sports");
+
+            return getNumberOfGamesByGenre(genre);
+        }
+
+        // step c vii.
+        private void printTopTenSortedGames () {
+            Comparator<Game> gameComperator = new Comparator<Game>() {
+                @Override
+                public int compare(Game o1, Game o2) {
+                    double diff = o1.getYear() - o2.getYear();
+                    if (diff != 0) {
+                        return Double.valueOf(o2.getYear()).compareTo((double) o1.getYear());
+                    }
+                    return Double.valueOf(o2.getPublisher()).compareTo(o1.getPublisher());
+                }
+            };
+        }
+
+
+        // step c viii.
+        private void exportSortedGames (String filePath){
+
+            try {
+
+                BufferedReader bW = new BufferedReader()
+            }
 
             FileWriter myWriter = new FileWriter("filePath");
             myWriter.write(String.format(name, publisher, year));
             myWriter.close();
-        } catch (IOException e) {
+        } catch(IOException e){
             e.printStackTrace();
         }
 
@@ -168,15 +193,26 @@ public class GameCollector {
 
     // step c ix.
     private Map<Integer, Integer> getCountOfGamesPerYear() {
-        Map<Integer, Integer> frequencies = new TreeMap<>();
-        Integer value = null;
-        frequencies.put(games.indexOf(3), Integer.valueOf(value));
-        for (Integer key : frequencies.keySet()) {
+        Map<Integer, Integer> numOfGamesPerYear = new TreeMap<>();
+//        Integer value = null;
+        for (Game game : games) {
+            Integer value = numOfGamesPerYear.get(game.getYear());
+            int freq = value == null ? 1 : value + 1;
 
-            value++;
+//            int freq;
+//            if (value == null){
+//                freq = 1;
+//            }else{
+//                freq = value+1;
+//            }
+
+
+            numOfGamesPerYear.put(game.getYear(),freq);
+
+
         }
 
 
-        return null;
+        return numOfGamesPerYear;
     }
 }
